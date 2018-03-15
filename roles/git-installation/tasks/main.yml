@@ -1,0 +1,21 @@
+---
+
+- name: "Ensure GIT is installed"
+  yum: name=git state=present
+
+- name: "Configure GIT"
+  copy: 
+    src: /home/vagrant/roles/git-installation/files/git-completion
+    dest: /.git-completion.bash
+
+- name: "Copy git config file to profile.d"
+  copy: 
+    src: /home/vagrant/roles/git-installation/files/git-profile
+    dest: /etc/profile.d/git-profile.sh
+
+- name: "Setting git config --global color.ui True"
+  shell: git config --global color.ui True
+  register: done
+
+- debug: msg="GIT ui color set"
+  when: done|success
